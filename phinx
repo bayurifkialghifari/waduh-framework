@@ -1,0 +1,12 @@
+<?php
+
+$action = $argv[1] ?? 'create';
+$name = $argv[2] ?? null;
+
+if (!in_array($action, ['create', 'migrate', 'rollback'])) {
+    echo 'Action not found';
+    exit(1);
+}
+
+
+shell_exec('vendor/bin/phinx ' . $action . ' ' . $name);

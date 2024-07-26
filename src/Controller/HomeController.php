@@ -2,8 +2,12 @@
 
 namespace App\Controller;
 
-class HomeController {
+use App\Utils\Controller;
+
+class HomeController extends Controller {
     public function index() {
-        echo "Hello World";
+        $name = 'Keren';
+        
+        $this->loadView('home', compact('name'));
     }
 }

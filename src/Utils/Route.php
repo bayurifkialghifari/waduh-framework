@@ -24,7 +24,9 @@ class Route {
         $isFound = false;
 
         foreach($this->listRoutes as $route) {
-            if($route[0] == $_SERVER['REQUEST_URI']) {
+            $type = $_SERVER['REQUEST_METHOD'];
+            
+            if($route[0] == $_SERVER['REQUEST_URI'] && $type == $route[3]) {
                 $controller = '\\' . $route[1];
                 $method = $route[2];
                 $controller = new $controller;
@@ -40,11 +42,13 @@ class Route {
         }
     }
 
-    public function addRoute($route, $controller, $method) {
+    public function addRoute($route, $controller, $method, $type = 'GET') {
+        $type = strtoupper($type);
         $this->listRoutes[] = [
             $route, 
             $controller, 
             $method,
+            $type,
         ];
     }
 

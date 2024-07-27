@@ -40,7 +40,7 @@ switch ($input) {
         $name = $argv[2] ?? 'M' . date('Y_m_d_H_i_s');
         
         // Check if file exists
-        if (file_exists('src/View/' . $name . '.php')) {
+        if (file_exists('src/View/' . $name . '.blade.php')) {
             echo 'File already exists';
             exit;
         }

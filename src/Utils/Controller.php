@@ -2,10 +2,12 @@
 
 namespace App\Utils;
 
-class Controller {
-    public function loadView($viewName, $data = []) {
-        extract($data);
+use eftec\bladeone\BladeOne;
 
-        require_once __DIR__ . '/../View/' . $viewName . '.php';
+class Controller {
+    protected function loadView($viewName, $data = []) {
+        $blade = new BladeOne(VIEW_PATH, VIEW_CACHE_PATH, BladeOne::MODE_DEBUG);
+
+        echo $blade->run($viewName, $data);
     }
 }

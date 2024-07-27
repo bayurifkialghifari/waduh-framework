@@ -9,5 +9,8 @@ $dotenv->load();
 // Start session
 session_start();
 
+// Load Config
+require_once __DIR__ . '/../src/Config/view.php';
+
 // Route
 require_once __DIR__ . '/../src/routes.php';

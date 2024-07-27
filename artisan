@@ -1,3 +1,5 @@
+#!/usr/bin/env php
+
 <?php
 
 $commands = '';
@@ -44,7 +46,7 @@ switch ($input) {
         }
 
         // Create file
-        $file = fopen('src/View/' . $name . '.php', 'w');
+        $file = fopen('src/View/' . $name . '.blade.php', 'w');
         $txt = file_get_contents('stubs/View.stub');
         fwrite($file, $txt);
         fclose($file);

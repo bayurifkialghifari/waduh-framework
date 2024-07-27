@@ -1,5 +1,0 @@
-<?php
-
-$ports = $argv[1] ?? 8080;
-
-shell_exec('php -S localhost:' . $ports . ' -t public');

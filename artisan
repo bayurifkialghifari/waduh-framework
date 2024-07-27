@@ -1,0 +1,68 @@
+<?php
+
+$commands = '';
+
+// Input
+$input = $argv[1] ?? 'run';
+
+switch ($input) {
+    case 'run':
+        $ports = $argv[2] ?? 8080;
+        $commands = 'php -S localhost:' . $ports . ' -t public';
+        break;
+
+    case 'make:migration':
+        $name = $argv[2] ?? 'R' . date('Y_m_d_H_i_s');
+        $commands = 'vendor/bin/phinx create ' . $name;
+        break;
+
+    case 'make:controller':
+        $name = $argv[2] ?? 'C' . date('Y_m_d_H_i_s');
+        
+        // Check if file exists
+        if (file_exists('src/Controller/' . $name . '.php')) {
+            echo 'File already exists';
+            exit;
+        }
+
+        // Create file
+        $file = fopen('src/Controller/' . $name . '.php', 'w');
+        $txt = file_get_contents('stubs/Controller.stub');
+        $txt = str_replace('{class}', $name, $txt);
+        fwrite($file, $txt);
+        fclose($file);
+
+        break;
+    
+    case 'make:view':
+        $name = $argv[2] ?? 'M' . date('Y_m_d_H_i_s');
+        
+        // Check if file exists
+        if (file_exists('src/View/' . $name . '.php')) {
+            echo 'File already exists';
+            exit;
+        }
+
+        // Create file
+        $file = fopen('src/View/' . $name . '.php', 'w');
+        $txt = file_get_contents('stubs/View.stub');
+        fwrite($file, $txt);
+        fclose($file);
+
+        break;
+
+    case 'migrate':
+        $commands = 'vendor/bin/phinx migrate';
+        break;
+        
+    case 'rollback':
+        $commands = 'vendor/bin/phinx rollback';
+        break;
+    default:
+        echo 'Command not found';
+        break;
+}
+
+if($commands) {
+    shell_exec($commands);
+}

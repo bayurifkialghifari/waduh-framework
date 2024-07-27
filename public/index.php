@@ -10,4 +10,4 @@ $dotenv->load();
 session_start();
 
 // Route
-require_once __DIR__ . '/../src/Route/index.php';
+require_once __DIR__ . '/../src/routes.php';

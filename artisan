@@ -63,7 +63,7 @@ switch ($input) {
         break;
 
     case 'db:seed':
-        $name = $argv[2] ?? '';
+        $name = isset($argv[2]) ? '-s ' . $argv[2] : '';
         $commands = 'vendor/bin/phinx seed:run ' . $name;
         break;
         

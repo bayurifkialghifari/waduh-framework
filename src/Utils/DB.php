@@ -4,8 +4,12 @@ namespace App\Utils;
 
 use mysqli;
 
-class DB {
+class DB extends mysqli {
     private static $db;
+
+    public function __construct($host, $user, $pass, $db, $port) {
+        parent::__construct($host, $user, $pass, $db, $port);
+    }
 
     public static function getInstance() {
         if (self::$db == null) {
@@ -15,7 +19,7 @@ class DB {
             $db = $_ENV['DB_NAME'] ?? '';
             $port = $_ENV['DB_PORT'] ?? '3306';
 
-            self::$db = new mysqli($host, $user, $pass, $db, $port);
+            self::$db = new DB($host, $user, $pass, $db, $port);
         }
         return self::$db;
     }

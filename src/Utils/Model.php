@@ -16,7 +16,7 @@ class Model {
     }
 
     public function __construct() {
-        $this->db = new DB;
+        $this->db = DB::getInstance();
     }
 
     public function __destruct() {
@@ -72,22 +72,22 @@ class Model {
     }
 
     public function where($key, $value) {
-        $this->sql .= ' WHERE ' . $key . ' = ' . $value;
+        $this->sql .= ' WHERE ' . $key . ' = "' . $value . '"';
         return $this;
     }
 
     public function whereNot($key, $value) {
-        $this->sql .= ' WHERE ' . $key . ' != ' . $value;
+        $this->sql .= ' WHERE ' . $key . ' != "' . $value . '"';
         return $this;
     }
 
     public function whereLike($key, $value) {
-        $this->sql .= ' WHERE ' . $key . ' LIKE ' . $value;
+        $this->sql .= ' WHERE ' . $key . ' LIKE "' . $value . '"';
         return $this;
     }
 
     public function whereNotLike($key, $value) {
-        $this->sql .= ' WHERE ' . $key . ' NOT LIKE ' . $value;
+        $this->sql .= ' WHERE ' . $key . ' NOT LIKE "' . $value . '"';
         return $this;
     }
 

@@ -18,6 +18,11 @@ switch ($input) {
         $commands = 'vendor/bin/phinx create ' . $name;
         break;
 
+    case 'make:seeder':
+        $name = $argv[2] ?? 'S' . date('Y_m_d_H_i_s');
+        $commands = 'vendor/bin/phinx seed:create ' . $name;
+        break;
+
     case 'make:controller':
         $name = $argv[2] ?? 'C' . date('Y_m_d_H_i_s');
         
@@ -55,6 +60,11 @@ switch ($input) {
 
     case 'migrate':
         $commands = 'vendor/bin/phinx migrate';
+        break;
+
+    case 'db:seed':
+        $name = $argv[2] ?? '';
+        $commands = 'vendor/bin/phinx seed:run ' . $name;
         break;
         
     case 'rollback':

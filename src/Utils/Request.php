@@ -12,16 +12,20 @@ class Request {
         return self::$instance;
     }
     
-    public function get($key) {
+    public function get($key = null) {
+        if($key == null) return $_GET;
         return $_GET[$key] ?? null;
     }
 
-    public function post($key) {
+    public function post($key = null) {
+        if($key == null) return $_POST;
         return $_POST[$key] ?? null;
     }
 
-    public function header($key) {
+    public function header($key = null) {
         $headers = $this->getRequestHeader();
+
+        if($key == null) return $headers;
 
         return $headers[$key] ?? null;
     }

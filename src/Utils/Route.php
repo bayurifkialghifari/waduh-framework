@@ -26,7 +26,7 @@ class Route {
         foreach($this->listRoutes as $route) {
             $type = $_SERVER['REQUEST_METHOD'];
             
-            if($route[0] == $_SERVER['REQUEST_URI'] && $type == $route[3]) {
+            if($route[0] == parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH) && $type == $route[3]) {
                 $controller = '\\' . $route[1];
                 $method = $route[2];
                 $controller = new $controller;

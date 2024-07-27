@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Utils\Auth;
 use App\Utils\Controller;
 
 class HomeController extends Controller {

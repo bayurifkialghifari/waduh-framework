@@ -29,10 +29,13 @@ class Auth {
 
         // Check password
         if(!password_verify($password, $auth[$passwordField])) return false;
-
         
         $this->session->set('auth', $auth);
             
         return true;
+    }
+
+    public function logout() {
+        $this->session->unset('auth');
     }
 }

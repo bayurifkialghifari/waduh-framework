@@ -2,15 +2,13 @@
 
 namespace App\Utils;
 
-use App\Utils\Url;
+use App\Middleware\Middleware;
 
 class Route {
     private static $route;
     public $listRoutes = [];
 
-    private function __construct(public $url = new Url) {
-
-    }
+    private function __construct(public $url = new Url) {}
 
     public static function getInstance() {
         if (self::$route == null) {
@@ -19,16 +17,23 @@ class Route {
         return self::$route;
     }
 
-    // Cehck route and open controller and method
+    // Check route and open controller and method
     public function checkRoute() {
         $isFound = false;
 
         foreach($this->listRoutes as $route) {
             $type = $_SERVER['REQUEST_METHOD'];
             
-            if($route[0] == parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH) && $type == $route[3]) {
-                $controller = '\\' . $route[1];
-                $method = $route[2];
+            if($route['route'] == $this->url->getUrl() && $type == $route['type']) {
+                $controller = '\\' . $route['controller'];
+                $method = $route['method'];
+
+                // Check middleware
+                if(isset($route['middleware'])) {
+                    Middleware::resolve($route['middleware']);    
+                }
+
+                // Call controller
                 $controller = new $controller;
                 $controller->$method();
 
@@ -42,15 +47,55 @@ class Route {
         }
     }
 
-    public function addRoute($route, $controller, $method, $type = 'GET') {
-        $type = strtoupper($type);
+    public function get($route, $controller, $method) {
         $this->listRoutes[] = [
-            $route, 
-            $controller, 
-            $method,
-            $type,
+            'route' => $route,
+            'controller' => $controller,
+            'method' => $method,
+            'type' => 'GET',
         ];
+
+        return $this;
     }
+
+    public function post($route, $controller, $method) {
+        $this->listRoutes[] = [
+            'route' => $route,
+            'controller' => $controller,
+            'method' => $method,
+            'type' => 'POST',
+        ];
+
+        return $this;
+    }
+
+    public function put($route, $controller, $method) {
+        $this->listRoutes[] = [
+            'route' => $route,
+            'controller' => $controller,
+            'method' => $method,
+            'type' => 'PUT',
+        ];
+
+        return $this;
+    }
+
+    public function delete($route, $controller, $method) {
+        $this->listRoutes[] = [
+            'route' => $route,
+            'controller' => $controller,
+            'method' => $method,
+            'type' => 'DELETE',
+        ];
+
+        return $this;
+    }
+
+    public function middleware($key) {
+        $this->listRoutes[array_key_last($this->listRoutes)]['middleware'] = $key;
+
+        return $this;
+    } 
 
     public function notFound() {
         http_response_code(404);

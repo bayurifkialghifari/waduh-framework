@@ -7,6 +7,7 @@ class Model {
     private static $model = null;
     private $db = null;
     private $sql = '';
+    private $bind = [];
 
     public static function getInstance() {
         if (self::$model == null) {
@@ -32,13 +33,12 @@ class Model {
     }
 
     public function insert($table, array $data = []) {
-        $columns = array_keys($data);
-        $values = array_values($data);
+        $columns = implode(', ', array_keys($data));
+        $values = implode(', ', array_fill(0, count($data), '?'));
 
-        $columns = implode(',', $columns);
-        $values = implode(',', $values);
+        $this->sql = 'INSERT INTO ' . $table . ' (' . $columns . ') VALUES (' . $values . ')';
+        $this->bind = array_values($data);
 
-        $this->sql = 'INSERT INTO ' . $table . '(' . $columns . ') SET (' . $values . ')';
         return $this;
     }
 
@@ -46,13 +46,14 @@ class Model {
         $rows = [];
 
         foreach ($data as $key => $value) {
-            $rows[] = $key . ' = ' . $value;
+            $rows[] = $key . ' = ?';
         }
 
-        $rows = implode(',', $rows);
+        $rows = implode(', ', $rows);
         
         $this->sql = 'UPDATE ' . $table . ' SET ' . $rows;
 
+        $this->bind = array_values($data);
         return $this;
     }
 
@@ -72,28 +73,37 @@ class Model {
     }
 
     public function where($key, $value) {
-        $this->sql .= ' WHERE ' . $key . ' = "' . $value . '"';
+        $this->sql .= ' WHERE ' . $key . ' = ?';
+        $this->bind[] = $value;
+
         return $this;
     }
 
     public function whereNot($key, $value) {
-        $this->sql .= ' WHERE ' . $key . ' != "' . $value . '"';
+        $this->sql .= ' WHERE ' . $key . ' != ?';
+        $this->bind[] = $value;
+
         return $this;
     }
 
     public function whereLike($key, $value) {
-        $this->sql .= ' WHERE ' . $key . ' LIKE "' . $value . '"';
+        $this->sql .= ' WHERE ' . $key . ' LIKE ?';
+        $this->bind[] = $value;
+
         return $this;
     }
 
     public function whereNotLike($key, $value) {
-        $this->sql .= ' WHERE ' . $key . ' NOT LIKE "' . $value . '"';
+        $this->sql .= ' WHERE ' . $key . ' NOT LIKE ?';
+        $this->bind[] = $value;
+
         return $this;
     }
 
     public function whereIn($key, array $data = []) {
-        $data = implode(',', $data);
-        $this->sql .= ' WHERE ' . $key . ' IN (' . $data . ')';
+        $this->sql .= ' WHERE ' . $key . ' IN (' . implode(',', array_fill(0, count($data), '?')) . ')';
+        $this->bind = array_merge($this->bind, $data);
+
         return $this;
     }
 
@@ -126,12 +136,16 @@ class Model {
     }
 
     public function limit($limit) {
-        $this->sql .= ' LIMIT ' . $limit;
+        $this->sql .= ' LIMIT ?';
+        $this->bind[] = $limit;
+
         return $this;
     }
 
     public function offset($offset) {
-        $this->sql .= ' OFFSET ' . $offset;
+        $this->sql .= ' OFFSET ?';
+        $this->bind[] = $offset;
+
         return $this;
     }
 
@@ -160,11 +174,17 @@ class Model {
     }
 
     public function get() {
-        return $this->db->query($this->sql);
+        $stmt = $this->db->prepare($this->sql);
+        $stmt->bind_param(str_repeat('s', count($this->bind)), ...$this->bind);
+        $stmt->execute();
+        return $stmt->get_result();
     }
 
     public function execute() {
-        return $this->db->query($this->sql);
+        $stmt = $this->db->prepare($this->sql);
+        $stmt->bind_param(str_repeat('s', count($this->bind)), ...$this->bind);
+        $stmt->execute();
+        return $stmt->affected_rows;
     }
 
     public function insertId() {

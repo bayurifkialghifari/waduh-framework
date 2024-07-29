@@ -9,7 +9,7 @@ function redirect($url) {
     echo '<script>window.location.href = "' . $url . '"</script>';
 }
 
-function hash($value, $cost = 12) {
+function passwordHash($value, $cost = 12) {
     password_hash($value, PASSWORD_BCRYPT, ['cost' => $cost]);
 }
 

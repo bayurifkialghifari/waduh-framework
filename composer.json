@@ -20,6 +20,7 @@
         "eftec/bladeone": "^4.13"
     },
     "require-dev": {
-        "robmorgan/phinx": "^0.16.2"
+        "robmorgan/phinx": "^0.16.2",
+        "symfony/var-dumper": "^7.1"
     }
 }

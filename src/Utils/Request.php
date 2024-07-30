@@ -11,6 +11,10 @@ class Request {
         }
         return self::$instance;
     }
+
+    public function all() {
+        return array_merge($_GET, $_POST);
+    }
     
     public function get($key = null) {
         if($key == null) return $_GET;

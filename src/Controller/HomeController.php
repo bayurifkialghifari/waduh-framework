@@ -39,4 +39,17 @@ class HomeController extends Controller {
 
         return redirect('/login');
     }
+
+    public function testInput() {
+        $this->loadView('test-input');
+    }
+
+    public function testInputPost() {
+        $valid = $this->validator->validate($this->request->all(), [
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
+
+        if(!$valid) redirectBack();
+    }
 }

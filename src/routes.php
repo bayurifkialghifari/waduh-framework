@@ -6,8 +6,10 @@ $route = Route::getInstance();
 $route->get('/', \App\Controller\HomeController::class, 'index');
 $route->get('/login', \App\Controller\HomeController::class, 'login')->middleware('guest');
 $route->get('/dashboard', \App\Controller\HomeController::class, 'dashboard')->middleware('auth');
-
 $route->get('/test-login', \App\Controller\HomeController::class, 'testLogin');
 $route->get('/logout', \App\Controller\HomeController::class, 'logout');
+
+$route->get('/test-input', \App\Controller\HomeController::class, 'testInput');
+$route->post('/test-input', \App\Controller\HomeController::class, 'testInputPost');
 
 $route->checkRoute();

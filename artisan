@@ -15,12 +15,12 @@ switch ($input) {
 
     case 'make:migration':
         $name = $argv[2] ?? 'R' . date('Y_m_d_H_i_s');
-        $commands = 'vendor/bin/phinx create ' . $name;
+        $commands = './vendor/bin/phinx create ' . $name;
         break;
 
     case 'make:seeder':
         $name = $argv[2] ?? 'S' . date('Y_m_d_H_i_s');
-        $commands = 'vendor/bin/phinx seed:create ' . $name;
+        $commands = './vendor/bin/phinx seed:create ' . $name;
         break;
 
     case 'make:controller':

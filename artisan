@@ -59,16 +59,16 @@ switch ($input) {
         break;
 
     case 'migrate':
-        $commands = 'vendor/bin/phinx migrate';
+        $commands = './vendor/bin/phinx migrate';
         break;
 
     case 'db:seed':
         $name = isset($argv[2]) ? '-s ' . $argv[2] : '';
-        $commands = 'vendor/bin/phinx seed:run ' . $name;
+        $commands = './vendor/bin/phinx seed:run ' . $name;
         break;
         
     case 'rollback':
-        $commands = 'vendor/bin/phinx rollback';
+        $commands = './vendor/bin/phinx rollback';
         break;
     default:
         echo 'Command not found';
